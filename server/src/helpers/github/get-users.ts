@@ -1,5 +1,5 @@
-import { octokit } from '../github';
-import { userMap } from './user-map';
+import { octokit } from '../../services/github';
+import { userMap } from '../user-map';
 
 export const getUsersByGithubOrganization = async (org: string) => {
   try {

@@ -1,3 +1,3 @@
 export * from './constants';
-export * from './get-users';
+export * from './github/get-users';
 export * from './user-map';
