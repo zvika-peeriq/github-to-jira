@@ -10,7 +10,7 @@ const exportGithubIssuesToJiraFormat = async (options: GithubExportOptions) => {
   console.info('Started export with the following Options:');
   console.info(options);
 
-  // Get list of repos to iterate through
+  // Get list of Repositories to iterate through
   const repos: string[] = (await getRepositoriesByGithubOrganization(options.githubRepoOwner, 'private')) as string[];
   let fileIterator = 0;
 
@@ -65,18 +65,22 @@ const exportGithubIssuesToJiraFormat = async (options: GithubExportOptions) => {
             comments,
           });
       }
-      // Define a file path to store the file
-      const now = new Date();
-      const filePath = `../data/${options.githubRepoOwner}/${repo}/${now.getFullYear()}-${
-        now.getMonth() + 1
-      }-${now.getDate()}-${now.getTime()}.json`;
+      if (jiraImport.projects.find((project) => project.name === options.projectName).issues.length > 0) {
+        // Define a file path to store the file
+        const now = new Date();
+        const filePath = `../data/${options.githubRepoOwner}/${repo}/${now.getFullYear()}-${
+          now.getMonth() + 1
+        }-${now.getDate()}-${now.getTime()}.json`;
 
-      // Create director if doesn't exist
-      fs.mkdirSync(`../data/${options.githubRepoOwner}/${repo}/`, { recursive: true });
-      // write the JSON file to the file path
-      fs.writeFileSync(filePath, JSON.stringify(jiraImport), { flag: 'wx' });
-      console.log(`Created ${filePath}`);
-      fileIterator++;
+        // Create director if doesn't exist
+        fs.mkdirSync(`../data/${options.githubRepoOwner}/${repo}/`, { recursive: true });
+        // write the JSON file to the file path
+        fs.writeFileSync(filePath, JSON.stringify(jiraImport), { flag: 'wx' });
+        console.log(`Created ${filePath}`);
+        fileIterator++;
+      } else {
+        console.log(`No issues found in ${repo}. Skipping...`);
+      }
     }
   }
 
@@ -86,10 +90,9 @@ const exportGithubIssuesToJiraFormat = async (options: GithubExportOptions) => {
 };
 
 exportGithubIssuesToJiraFormat({
-  githubRepo: 'aqueduct',
   githubRepoOwner: 'peeriq',
   labels: 'jira',
-  projectKey: 'AN',
-  projectName: 'Analytics',
+  projectKey: 'PIQ',
+  projectName: 'peeriq',
   state: 'open',
 });
