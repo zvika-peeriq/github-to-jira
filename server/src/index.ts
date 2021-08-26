@@ -1,118 +1,90 @@
 import fs from 'fs';
 
-import { octokit } from './github/client';
-import { JIRAImport, Comment } from './model';
-import { userMap } from './helpers/user-map';
+import { octokit } from './github';
+import { JIRAImport, Comment, GithubExportOptions } from './models';
+import { userMap } from './helpers';
 
-const test = async () => {
+const exportGithubIssuesToJiraFormat = async (options: GithubExportOptions) => {
+  // Start
+  console.info('Started export with the following Options:');
+  console.info(options);
+
+  // Define Jira import object
   const jiraImport: JIRAImport = {
-    projects: [{ name: 'Analytics', key: 'AN', issues: [] }],
+    projects: [{ name: options.projectName, key: options.projectKey, issues: [] }],
   };
 
-  const iterator = octokit.paginate.iterator(octokit.rest.issues.listForRepo, {
-    owner: 'peeriq',
-    repo: 'aqueduct',
-    state: 'open',
-    labels: 'jira',
+  // Get all issues given a repo and filter by la
+  const issuesIterator = octokit.paginate.iterator(octokit.rest.issues.listForRepo, {
+    owner: options.githubRepoOwner,
+    repo: options.githubRepo,
+    state: options.state,
+    labels: options.labels || undefined,
     per_page: 100,
   });
 
-  for await (const { data: issues } of iterator) {
+  // Iterate on the issues
+  for await (const { data: issues } of issuesIterator) {
     for (const issue of issues) {
+      // Define a Comments array
       const comments: Comment[] = [];
-      const iterator2 = octokit.paginate.iterator(octokit.rest.issues.listComments, {
+      // Iterate through all comments for a given issue number
+      const commentsIterator = octokit.paginate.iterator(octokit.rest.issues.listComments, {
         issue_number: issue.number,
-        owner: 'peeriq',
-        repo: 'aqueduct',
+        owner: options.githubRepoOwner,
+        repo: options.githubRepo,
       });
-      for await (const { data } of iterator2) {
-        data.forEach((d) =>
-          comments.push({ author: userMap.get(d.user.login), body: d.body, created: new Date(d.created_at) })
+      for await (const { data: commentsResponse } of commentsIterator) {
+        // If a comment exit push it to the comments object
+        commentsResponse.forEach((comment) =>
+          comments.push({
+            author: userMap.get(comment.user.login),
+            body: comment.body,
+            created: new Date(comment.created_at),
+          })
         );
       }
-      jiraImport.projects[0].issues.push({
-        summary: issue.title,
-        externalId: issue.number.toString(),
-        repo: 'aqueduct',
-        description: issue.body,
-        created: new Date(issue.created_at),
-        issueType: 'Task',
-        reporter: userMap.get(issue.user.login),
-        status: 'TO DO',
-        labels: issue.labels.map((l) => l.name),
-        comments,
-      });
-      // console.log(JSON.stringify(jiraImport));
+      // Push the issue and comments to the Jira Import Object
+      jiraImport.projects
+        .find((project) => project.name === options.projectName)
+        .issues.push({
+          summary: issue.title,
+          externalId: issue.number.toString(),
+          repo: options.githubRepo,
+          description: issue.body,
+          created: new Date(issue.created_at),
+          issueType: 'Task',
+          reporter: userMap.get(issue.user.login),
+          status: 'TO DO',
+          labels: issue.labels.map((l) => l.name),
+          comments,
+        });
     }
   }
-  fs.writeFile(__dirname + '/myjsonfile.json', JSON.stringify(jiraImport), 'utf-8', (err) => {
+
+  // Define a file path to store the file
+  const now = new Date();
+  const filePath = `${__dirname}/${options.githubRepoOwner}/${
+    options.githubRepo
+  }/${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${now.getTime()}.json`;
+
+  // write the JSON file to the file path
+  fs.writeFile(filePath, JSON.stringify(jiraImport), { flag: 'wx' }, (err) => {
     if (err) {
       console.error(err.toString());
-    } else {
-      console.log('Done');
+      process.exit(1);
     }
   });
-
-  // // iterate through each response
-  // for await (const { data: issues } of iterator) {
-  //   for (const issue of issues) {
-  //     console.log('Issue #%d: %s', issue.number, issue.title);
-  //   }
-  // }
-
-  // try {
-  //   const { data } = await octokit.rest.issues.listForRepo({
-  //     owner: 'peeriq',
-  //     repo: 'aqueduct',
-  //     state: 'open',
-  //     per_page: 100,
-  //   });
-  //   data1 = data;
-  // } catch (err) {
-  //   console.error(err.toString());
-  // }
-
-  // const results = data1.map((d) => {
-  //   return {
-  //     body: d.body,
-  //     created_by: d.user.login,
-  //     id: d.id,
-  //     repo: d.repository,
-  //     comments: [],
-  //   };
-  // });
-
-  // for await (const data of results) {
-  //   try {
-  //     const { data: res, headers } = await octokit.rest.issues.listComments({
-  //       owner: 'peeriq',
-  //       repo: 'aqueduct',
-  //       issue_number: data.id,
-  //     });
-  //     results[data.id].comments.push(...res);
-  //     fs.writeFileSync(__dirname + 'data.txt', JSON.stringify(results));
-  //   } catch (err) {
-  //     console.log(err.toString());
-  //   }
-  // }
-
-  // console.log('Done');
+  // Exit with message
+  console.info(`Created File: ${filePath}`);
+  process.exit();
 };
 
-const getUsers = async () => {
-  try {
-    const iterator = octokit.paginate.iterator(octokit.rest.orgs.listMembers, { org: 'peeriq' });
-    let logins: Array<{ login: string; name: string }>;
-    for await (const { data: users } of iterator) {
-      logins = users.map((u) => {
-        return { login: u.login, name: userMap.get(u.login) };
-      });
-    }
-    console.log(logins);
-  } catch (e) {
-    console.error(e.toString());
-  }
-};
-
-// test();
-// getUsers();
+exportGithubIssuesToJiraFormat({
+  githubRepo: 'aqueduct',
+  githubRepoOwner: 'peeriq',
+  labels: 'jira',
+  projectKey: 'AN',
+  projectName: 'Analytics',
+  state: 'open',
+});

@@ -1,5 +1,4 @@
 import { Octokit } from 'octokit';
-
-const GITHUB_TOKEN = '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';
+import { GITHUB_TOKEN } from '../helpers/constants';
 
 export const octokit = new Octokit({ auth: GITHUB_TOKEN });
