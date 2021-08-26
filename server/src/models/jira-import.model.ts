@@ -7,6 +7,8 @@ interface Attachment {
 }
 
 interface Issue {
+  assignee?: string;
+  watchers?: string[];
   key?: string;
   status?: string;
   reporter?: string | unknown;
