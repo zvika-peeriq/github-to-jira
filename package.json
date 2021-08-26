@@ -1,0 +1,19 @@
+{
+  "name": "@peeriq/github-test",
+  "version": "1.0.0",
+  "description": "Get List of Github Issues",
+  "license": "ISC",
+  "author": "Zvika Badalov",
+  "files": [
+    "./server/*"
+  ],
+  "scripts": {
+    "lint:server": "cd server && npm run lint && npm run format",
+    "postinstall": "cd server && npm install",
+    "version": "git add -A",
+    "postversion": "git push && git push --tags",
+    "preversion": "npm run lint:server",
+    "debug": "cd server && npm run debug",
+    "start": "cd server && npm run watch"
+  }
+}

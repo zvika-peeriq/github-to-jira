@@ -1,0 +1,52 @@
+{
+  "projects": [
+    {
+      "name": "Analytics",
+      "key": "AN",
+      "issues": [
+        {
+          "summary": "ETL wishlist",
+          "externalId": "2928",
+          "repo": "aqueduct",
+          "description": "1) simplify airflow (do we need glusterfs? etc.) and get it working again in general of course\r\n\r\n2) FIFO queues for loan id queue - this should prevent the need to address duplicate processed loan records downstream (currently in the copy / load table task) as FIFO SQS should guarantee exact-once delivery\r\n\r\n3) Remove the trigger queue to AJO - a REST request to AJO should be simpler with no downsides (but we will confirm , along with testing)\r\n\r\n4) Confirm if ES needs to pull from a queue of messages or if writing directly to ES is fine (which would be much simpler) - also see other prior git issues about auto-pruning ES (time based indices, etc.)\r\n\r\n5) status service should not be inferring status from pulling and aggregating certain log messages in ES - something like status should be using something much more structured like postgres or at least something like redis - not searching and aggregating log messages in ES\r\n\r\n6) streamline the terminator service - some of the above should allow us to delete some of terminator - and we should be leveraging configuring infrastructure in AWS (like SQS queues possibly) to automatically be removed after x number of minutes of inactivity, where possible (instead of having our terminator service)\r\n\r\n7) find a managed service version of Vertica - and potentially use instead of RedShift as well",
+          "created": "2021-07-29T15:47:01.000Z",
+          "issueType": "Task",
+          "reporter": "barry@peeriq.com",
+          "status": "TO DO",
+          "comments": [
+            {
+              "author": "barry@peeriq.com",
+              "body": "8) csv2cassandra probably doesn't scale well - need the csv2cassandra instances to auto-scale so many runs can run simultaneously (use ECS or Fargate, etc. instead of ElasticBeanstalk potentially)",
+              "created": "2021-07-29T15:53:26.000Z"
+            },
+            {
+              "author": "jay@peeriq.com",
+              "body": "@barry@peeriq.com good list! Few things I want to point out/add.\r\n\r\n9) It looks like email alerts are down for ETL jobs, we def need to get that back up. Something with a SMTP Auth error. Also maybe looking into sending success email alerts when a job completes.\r\n\r\n-I do have some specific requests surrounding airflow I want to address once we start exploring how to want to use it. Given some of our clients/potentially future ones are time sensitive i do want to see if theres a way to trigger multiple runs in a day without risk of running etl jobs multiple times. But we can discuss this + others once we start looking into it",
+              "created": "2021-07-29T18:22:54.000Z"
+            },
+            {
+              "author": "barry@peeriq.com",
+              "body": "thanks @jay@peeriq.com \r\n\r\nand from this morning 10) need much better error messaging at least in our logs for errors that cause loans to drop, even if the root cause is a source data issue - root cause should be in the error message",
+              "created": "2021-08-02T16:42:58.000Z"
+            },
+            {
+              "author": "barry@peeriq.com",
+              "body": "11) why does the django task_manager manage.py in iris have ~100 calls to MDS every time manage.py is run?\r\n\r\n12) get all the DQ rules out of SQL and into Batch (python), and then get EMR into Batch (downstream of DQ rules)",
+              "created": "2021-08-19T17:27:53.000Z"
+            },
+            {
+              "author": "barry@peeriq.com",
+              "body": "13) remove un-necessary python packages (if any) and upgrade existing\r\n\r\n14) re-visit docker-compose files for running locally",
+              "created": "2021-08-20T14:37:21.000Z"
+            },
+            {
+              "author": "zvika-peeriq",
+              "body": "Test: \r\n![image](https://user-images.githubusercontent.com/83380785/130889840-06840cad-0d15-444f-a786-3e4dd0135f39.png)\r\n",
+              "created": "2021-08-26T02:22:11.000Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
