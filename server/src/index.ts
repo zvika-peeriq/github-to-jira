@@ -14,7 +14,7 @@ const exportGithubIssuesToJiraFormat = async (options: GithubExportOptions) => {
     projects: [{ name: options.projectName, key: options.projectKey, issues: [] }],
   };
 
-  // Get all issues given a repo and filter by la
+  // Get all issues given a repo and filter by labels
   const issuesIterator = octokit.paginate.iterator(octokit.rest.issues.listForRepo, {
     owner: options.githubRepoOwner,
     repo: options.githubRepo,
@@ -64,9 +64,9 @@ const exportGithubIssuesToJiraFormat = async (options: GithubExportOptions) => {
 
   // Define a file path to store the file
   const now = new Date();
-  const filePath = `${__dirname}/${options.githubRepoOwner}/${
-    options.githubRepo
-  }/${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${now.getTime()}.json`;
+  const filePath = `${__dirname}/${options.githubRepoOwner}/${options.githubRepo}/${now.getFullYear()}-${
+    now.getMonth() + 1
+  }-${now.getDate()}-${now.getTime()}.json`;
 
   // write the JSON file to the file path
   fs.writeFile(filePath, JSON.stringify(jiraImport), { flag: 'wx' }, (err) => {
