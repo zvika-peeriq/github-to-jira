@@ -1,19 +1,61 @@
 {
-  "name": "@peeriq/github-test",
+  "name": "@peeriq/github-to-jira",
+  "description": "Export Github issues to Jira JSON Import",
   "version": "1.0.0",
-  "description": "Get List of Github Issues",
-  "license": "ISC",
-  "author": "Zvika Badalov",
-  "files": [
-    "./server/*"
-  ],
+  "engines": {
+    "node": "14.x.x"
+  },
+  "bin": {
+    "githubToJira": "dist/index.js"
+  },
   "scripts": {
-    "lint:server": "cd server && npm run lint && npm run format",
-    "postinstall": "cd server && npm install",
-    "version": "git add -A",
-    "postversion": "git push && git push --tags",
-    "preversion": "npm run lint:server",
-    "debug": "cd server && npm run debug",
-    "start": "cd server && npm run watch"
+    "build-ts": "tsc",
+    "build": "npm run build-ts && npm run lint",
+    "debug": "npm run build && npm run watch-debug",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "tsc --noEmit && eslint '*/**/*.{js,ts}' --quiet --fix",
+    "start:debug": "nodemon --inspect dist/index.js",
+    "start": "node index.js",
+    "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"blue.bold,magenta.bold\" \"npm run watch-ts\" \"npm run start:debug\"",
+    "watch-node": "nodemon ./dist/index.js",
+    "watch-ts": "tsc -w",
+    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"blue.bold,magenta.bold,\" \"npm run watch-ts\" \"npm run watch-node\""
+  },
+  "dependencies": {
+    "dotenv": "10.0.0",
+    "octokit": "~1.4.0",
+    "commander": "~8.1.0",
+    "co": "~4.6.0",
+    "co-prompt": "~1.0.0"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/git": "^9.0.0",
+    "semantic-release": "^17.4.7",
+    "@types/node": "^14.14.33",
+    "@types/co": "^4.6.2",
+    "@typescript-eslint/eslint-plugin": "^4.29.3",
+    "@typescript-eslint/parser": "^4.29.3",
+    "concurrently": "^6.2.1",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.1",
+    "nodemon": "^2.0.12",
+    "prettier": "^2.3.2",
+    "tslib": "^2.3.1",
+    "typescript": "^4.3.5"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/github",
+      "@semantic-release/git"
+    ]
   }
 }

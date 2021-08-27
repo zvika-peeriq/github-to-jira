@@ -1,6 +1,10 @@
-import { octokit } from '../../services/github';
+import { Octokit } from 'octokit';
 
-export const getRepositoriesByGithubOrganization = async (org: string, type: 'all' | 'private' | 'public') => {
+export const getRepositoriesByGithubOrganization = async (
+  org: string,
+  type: 'all' | 'private' | 'public',
+  octokit: Octokit
+) => {
   try {
     if (!org) {
       return new Error('Missing org paramter');

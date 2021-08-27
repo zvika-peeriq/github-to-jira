@@ -1,21 +1,24 @@
-import fs from 'fs';
+import { JIRAImport, Comment, GithubExportOptions } from '../../models';
+import { userMap } from '../../helpers';
+import { getRepositoriesByGithubOrganization } from './get-repos-by-org';
+import { Octokit } from 'octokit';
 
-import { octokit } from './services/github';
-import { JIRAImport, Comment, GithubExportOptions } from './models';
-import { userMap } from './helpers';
-import { getRepositoriesByGithubOrganization } from './helpers/github/get-repos-by-org';
-
-const exportGithubIssuesToJiraFormat = async (options: GithubExportOptions) => {
+export const exportGithubIssuesToJiraFormat = async (options: GithubExportOptions, octokit: Octokit) => {
   // Start
-  console.info('Started export with the following Options:');
-  console.info(options);
+  console.log('Export of Github Issues Started...');
+  
+  if (options.verbose) {
+    console.info('Started export with the following Options:');
+    console.info(options);
+  }
 
   // Get list of Repositories to iterate through
-  const repos: string[] = (await getRepositoriesByGithubOrganization(options.githubRepoOwner, 'private')) as string[];
-  let fileIterator = 0;
+  const repos: string[] = (await getRepositoriesByGithubOrganization(
+    options.githubRepoOwner,
+    'private',
+    octokit
+  )) as string[];
 
-  // Create director if doesn't exist
-  fs.mkdirSync(`../data/${options.githubRepoOwner}/`, { recursive: true });
   // Define Jira import object
   const jiraImport: JIRAImport = {
     projects: [{ name: options.projectName, key: options.projectKey, issues: [] }],
@@ -72,27 +75,5 @@ const exportGithubIssuesToJiraFormat = async (options: GithubExportOptions) => {
       }
     }
   }
-
-  // Define a file path to store the file
-  const now = new Date();
-  const filePath = `../data/${options.githubRepoOwner}/${now.getFullYear()}-${
-    now.getMonth() + 1
-  }-${now.getDate()}.json`;
-
-  // write the JSON file to the file path
-  fs.writeFileSync(filePath, JSON.stringify(jiraImport), { flag: 'wx' });
-  console.log(`Created ${filePath}`);
-  fileIterator++;
-
-  // Exit with message
-  console.info(`Created ${fileIterator} Files`);
-  process.exit();
+  return jiraImport;
 };
-
-exportGithubIssuesToJiraFormat({
-  githubRepoOwner: 'peeriq',
-  labels: 'jira',
-  projectKey: 'PIQ',
-  projectName: 'peeriq',
-  state: 'open',
-});

@@ -28,6 +28,8 @@ testem.log
 /typings
 /logs
 /deployment
+/keys
+/.env
 
 # e2e
 /e2e/*.js
@@ -45,3 +47,4 @@ Thumbs.db
 
 # DB
 /db/**/*.json
+.env

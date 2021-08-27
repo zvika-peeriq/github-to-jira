@@ -1,7 +1,7 @@
-import { octokit } from '../../services/github';
+import { Octokit } from 'octokit';
 import { userMap } from '../user-map';
 
-export const getUsersByGithubOrganization = async (org: string) => {
+export const getUsersByGithubOrganization = async (org: string, octokit: Octokit) => {
   try {
     if (!org) {
       return new Error('Missing org paramter');
