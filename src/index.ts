@@ -5,7 +5,7 @@ import { exportGithubIssuesToJiraFormat } from './helpers/github';
 import { exportToJson } from './helpers/export-to-json';
 import { prompt } from './helpers';
 
-const VERSION = process.env.npm_package_version || '1.0.0';
+const VERSION = process.env.npm_package_version || '1.0.1';
 
 console.log(VERSION);
 interface Options {
