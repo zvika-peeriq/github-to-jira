@@ -1,3 +1,10 @@
+## [2.0.5](https://github.com/zvika-peeriq/github-to-jira/compare/v2.0.4...v2.0.5) (2021-08-28)
+
+
+### Bug Fixes
+
+* **npm:** remove private tag ([3108e95](https://github.com/zvika-peeriq/github-to-jira/commit/3108e95b88d46a865e3f8f8055c9faee67d01fb3))
+
 ## [2.0.4](https://github.com/zvika-peeriq/github-to-jira/compare/v2.0.3...v2.0.4) (2021-08-28)
 
 
