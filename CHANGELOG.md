@@ -1,3 +1,10 @@
+## [2.0.6](https://github.com/zvika-peeriq/github-to-jira/compare/v2.0.5...v2.0.6) (2021-08-28)
+
+
+### Bug Fixes
+
+* **npm:** final!!!! ([3b75cc8](https://github.com/zvika-peeriq/github-to-jira/commit/3b75cc8ac8ce653a76f15ce337a19a728995ced3))
+
 ## [2.0.5](https://github.com/zvika-peeriq/github-to-jira/compare/v2.0.4...v2.0.5) (2021-08-28)
 
 
