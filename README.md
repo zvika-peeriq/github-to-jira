@@ -6,7 +6,7 @@ This project is inspired by (https://github.com/gavinr/github-csv-tools.git)
 Prerequisite: [Install Node.js](https://nodejs.org/en/), then run this to install:
 
 ```
-npm install -g @peeriq/github-to-jira
+npm install -g @tbadlov/github-to-jira
 ```
 
 After install, `githubToJira --help` for info on how to use, or see below.
