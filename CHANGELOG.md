@@ -1,3 +1,10 @@
+## [2.0.4](https://github.com/zvika-peeriq/github-to-jira/compare/v2.0.3...v2.0.4) (2021-08-28)
+
+
+### Bug Fixes
+
+* **npm:** adding publish public and private false ([42abe17](https://github.com/zvika-peeriq/github-to-jira/commit/42abe17d029475006c658fd63daa9ecd0776bc80))
+
 ## [2.0.3](https://github.com/zvika-peeriq/github-to-jira/compare/v2.0.2...v2.0.3) (2021-08-28)
 
 
