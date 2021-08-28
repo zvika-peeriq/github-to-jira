@@ -1,7 +1,7 @@
 {
   "name": "@peeriq/github-to-jira",
   "description": "Export Github issues to Jira JSON Import",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "engines": {
     "node": "14.x.x"
   },
@@ -24,7 +24,6 @@
     "watch-node": "nodemon ./dist/index.js",
     "watch-ts": "tsc -w",
     "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"blue.bold,magenta.bold,\" \"npm run watch-ts\" \"npm run watch-node\""
-
   },
   "dependencies": {
     "dotenv": "10.0.0",
