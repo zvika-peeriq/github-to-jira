@@ -5,7 +5,6 @@
   "engines": {
     "node": "14.x.x"
   },
-  "private": "false",
   "bin": {
     "githubToJira": "dist/index.js"
   },
