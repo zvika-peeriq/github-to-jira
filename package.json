@@ -15,7 +15,7 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tsc --noEmit && eslint '*/**/*.{js,ts}' --quiet --fix",
     "postversion": "git push && git push --tags",
-    "preversion": "npm run lint:server",
+    "preversion": "npm run lint",
     "semantic-release": "semantic-release",
     "start:debug": "nodemon --inspect dist/index.js",
     "start": "node index.js",
