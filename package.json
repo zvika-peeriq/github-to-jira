@@ -1,7 +1,7 @@
 {
   "name": "@tbadlov/github-to-jira",
   "description": "Export Github issues to Jira JSON Import",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "engines": {
     "node": "14.x.x"
   },
