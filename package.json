@@ -1,5 +1,5 @@
 {
-  "name": "@tbadlov/github-to-jira",
+  "name": "@zvika-peeriq/github-to-jira",
   "description": "Export Github issues to Jira JSON Import",
   "version": "2.0.2",
   "engines": {
