@@ -1,10 +1,13 @@
 import { program } from 'commander';
-import { co } from 'co';
-import prompt from 'co-prompt';
+import { Octokit } from '@octokit/rest';
+
 import { exportGithubIssuesToJiraFormat } from './helpers/github';
 import { exportToJson } from './helpers/export-to-json';
-import { Octokit } from 'octokit';
+import { prompt } from './helpers';
 
+const VERSION = process.env.npm_package_version || '1.0.0';
+
+console.log(VERSION);
 interface Options {
   githubEnterprise: string;
   token: string;
@@ -18,7 +21,7 @@ interface Options {
 }
 
 program
-  .version('1.0.0')
+  .version(VERSION)
   .option('-g, --githubEnterprise [https://api.github.my-company.com]', 'Your GitHub Enterprise URL.')
   .option('-t, --token [token]', 'The GitHub token. https://github.com/settings/tokens')
   .option('-l, --labels [jira,test]', 'Comma separated label to apply the filters on')
@@ -28,58 +31,49 @@ program
   .option('-k, --jiraProjectKey [TPA]', 'The name of the project Key e.g TPA')
   .option('-s, --state [all,open,closed]', 'The state of the issue [all, open - Default, closed]')
   .option('-v, --verbose', 'Include additional logging information.')
-  .action((options: Options) => {
-    co(function* () {
-      const retObject: Options = Object.create({});
-      retObject.githubEnterprise = options.githubEnterprise || 'https://api.github.com';
-      retObject.token = options.token || '';
-      if (retObject.token === '') {
-        retObject.token = yield prompt('Token (get from https://github.com/settings/tokens): ');
-      }
-      retObject.exportFileName = options.exportFileName || undefined;
+  .action(async (options: Options) => {
+    const retObject: Options = Object.create({});
+    retObject.githubEnterprise = options.githubEnterprise || 'https://api.github.com';
+    retObject.token = options.token || '';
+    if (retObject.token === '') {
+      retObject.token = await prompt('Token (get from https://github.com/settings/tokens): ');
+    }
+    retObject.exportFileName = options.exportFileName || undefined;
 
-      retObject.organization = options.organization || '';
-      if (retObject.organization === '') {
-        retObject.organization = yield prompt('User or Organization: ');
-      }
+    retObject.organization = options.organization || '';
+    if (retObject.organization === '') {
+      retObject.organization = await prompt('User or Organization: ');
+    }
 
-      retObject.jiraProjectName = options.jiraProjectName || '';
-      if (retObject.jiraProjectName === '') {
-        retObject.jiraProjectName = yield prompt('JIRA Project Name: ');
-      }
+    retObject.jiraProjectName = options.jiraProjectName || '';
+    if (retObject.jiraProjectName === '') {
+      retObject.jiraProjectName = await prompt('JIRA Project Name: ');
+    }
 
-      retObject.jiraProjectKey = options.jiraProjectKey || '';
-      if (retObject.jiraProjectKey === '') {
-        retObject.jiraProjectKey = yield prompt('JIRA Key Name: ');
-      }
+    retObject.jiraProjectKey = options.jiraProjectKey || '';
+    if (retObject.jiraProjectKey === '') {
+      retObject.jiraProjectKey = await prompt('JIRA Key Name: ');
+    }
 
-      retObject.labels = options.labels || '';
-      if (retObject.labels === '') {
-        retObject.labels = yield prompt('Labels [jira,all,test]: ');
-      }
+    retObject.labels = options.labels || '';
+    if (retObject.labels === '') {
+      retObject.labels = await prompt('Labels [jira,all,test]: ');
+    }
 
-      retObject.verbose = options.verbose || false;
+    retObject.verbose = options.verbose || false;
 
-      return retObject;
-    }).then(
-      async (values: Options) => {
-        const octokit = new Octokit({ auth: values.token });
-        const jiraImport = await exportGithubIssuesToJiraFormat(
-          {
-            githubRepoOwner: values.organization,
-            labels: values.labels,
-            projectKey: values.jiraProjectKey,
-            projectName: values.jiraProjectName,
-            state: values.state || 'open',
-            verbose: values.verbose,
-          },
-          octokit
-        );
-        exportToJson(values.organization, jiraImport, values.exportFileName);
+    const octokit = new Octokit({ auth: retObject.token });
+    const jiraImport = await exportGithubIssuesToJiraFormat(
+      {
+        githubRepoOwner: retObject.organization,
+        labels: retObject.labels,
+        projectKey: retObject.jiraProjectKey,
+        projectName: retObject.jiraProjectName,
+        state: retObject.state || 'open',
+        verbose: retObject.verbose,
       },
-      (err) => {
-        console.error('ERROR', err);
-      }
+      octokit
     );
+    exportToJson(retObject.organization, jiraImport, retObject.exportFileName);
   })
   .parse(process.argv);

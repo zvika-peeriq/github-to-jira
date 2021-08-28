@@ -1,4 +1,4 @@
-import { Octokit } from 'octokit';
+import { Octokit } from '@octokit/rest';
 import { userMap } from '../user-map';
 
 export const getUsersByGithubOrganization = async (org: string, octokit: Octokit) => {

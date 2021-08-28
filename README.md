@@ -1,3 +1,6 @@
+# Github Issue to Jira JSON
+
+This project is inspired by (https://github.com/gavinr/github-csv-tools.git)
 ## Usage
 
 Prerequisite: [Install Node.js](https://nodejs.org/en/), then run this to install:
@@ -6,19 +9,19 @@ Prerequisite: [Install Node.js](https://nodejs.org/en/), then run this to instal
 npm install -g @peeriq/github-to-jira
 ```
 
-After install, `githubCsvTools --help` for info on how to use, or see below.
+After install, `githubToJira --help` for info on how to use, or see below.
 
 Instructions for exporting:
 
 ### To Export Issues
 
 ```
-githubCsvTools
+githubToJira
 ```
 
 | Option                 | Default                                                                                               | Notes                                                                                                                                                                                                         |
 | ---------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| -f, --exportFileName   | YYYY-MM-DD-hh-mm-ss-issues.csv                                                                        | The name of the CSV you'd like to export to.                                                                                                                                                                  |
+| -f, --exportFileName   | YYYY-MM-DD-hh-mm-ss-issues.json                                                                        | The name of the JSON you'd like to export to.                                                                                                                                                                  |
 
 ### Tokens
 
@@ -38,7 +41,7 @@ For all actions, the tool will ask you to input a GitHub token. To obtain this t
   -t, --token [token]                           | The GitHub token. https://github.com/settings/tokens
   -l, --labels [jira,test]                      | Comma separated label to apply the filters on
   -o, --organization [organization]             | The User or Organization slug that the repo lives under.
-  -f, --exportFileName [export.csv]             | The name of the JSON file to export to.
+  -f, --exportFileName [export.json]             | The name of the JSON file to export to.
   -p, --jiraProjectName [Test Project]          | The name of the project in JIRA
   -k, --jiraProjectKey [TPA]                    | The name of the project Key e.g TPA
   -s, --state [all,open,closed]                 | The state of the issue [all, open - Default, closed]
@@ -57,7 +60,5 @@ For all actions, the tool will ask you to input a GitHub token. To obtain this t
 ## Thanks
 
 - [octokit/rest.js](https://octokit.github.io/rest.js/)
-- [nodeCSV](https://www.npmjs.com/package/csv)
 - [commander](https://www.npmjs.com/package/commander)
-- [co](https://www.npmjs.com/package/co)
-- [Tim Patterson's Post on Atlassian.com](https://developer.atlassian.com/blog/2015/11/scripting-with-node/)
+- [gavinr](https://github.com/gavinr/)

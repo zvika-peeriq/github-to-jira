@@ -1,7 +1,8 @@
+import { Octokit } from '@octokit/rest';
+
 import { JIRAImport, Comment, GithubExportOptions } from '../../models';
 import { userMap } from '../../helpers';
 import { getRepositoriesByGithubOrganization } from './get-repos-by-org';
-import { Octokit } from 'octokit';
 
 export const exportGithubIssuesToJiraFormat = async (options: GithubExportOptions, octokit: Octokit) => {
   // Start
