@@ -62,4 +62,4 @@ See [CHANGELOG.md](https://github.com/zvika-peeriq/github-to-jira/blob/master/CH
 - [octokit/rest.js](https://octokit.github.io/rest.js/)
 - [commander](https://www.npmjs.com/package/commander)
 - [gavinr](https://github.com/gavinr/)
-- [semantic-version]
+- [semantic-version](TBD)
