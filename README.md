@@ -55,7 +55,7 @@ For all actions, the tool will ask you to input a GitHub token. To obtain this t
 
 ## Changelog
 
-<!-- See [CHANGELOG.md](https://github.com/gavinr/github-csv-tools/blob/master/CHANGELOG.md) -->
+See [CHANGELOG.md](https://github.com/zvika-peeriq/github-to-jira/blob/master/CHANGELOG.md)
 
 ## Thanks
 
