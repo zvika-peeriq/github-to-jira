@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/zvika-peeriq/github-to-jira/compare/v2.0.2...v2.0.3) (2021-08-28)
+
+
+### Bug Fixes
+
+* **pacakge:** once again forgot to add pacakge ([f1645a3](https://github.com/zvika-peeriq/github-to-jira/commit/f1645a30e3b38f5883bf6bde6eb9f2f03feff5c9))
+
 ## [2.0.2](https://github.com/zvika-peeriq/github-to-jira/compare/v2.0.1...v2.0.2) (2021-08-28)
 
 
