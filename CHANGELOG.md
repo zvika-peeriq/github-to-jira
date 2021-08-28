@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/zvika-peeriq/github-to-jira/compare/v2.0.1...v2.0.2) (2021-08-28)
+
+
+### Bug Fixes
+
+* **package:** Cannot publish to those npm repos ([f9448b3](https://github.com/zvika-peeriq/github-to-jira/commit/f9448b347f83ea8f06a6b54562036970cc02df52))
+
 ## [2.0.1](https://github.com/zvika-peeriq/github-to-jira/compare/v2.0.0...v2.0.1) (2021-08-28)
 
 
