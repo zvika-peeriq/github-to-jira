@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/zvika-peeriq/github-to-jira/compare/v2.0.6...v2.1.0) (2021-08-30)
+
+
+### Features
+
+* **sec:** Added code security analysis ([1193e0b](https://github.com/zvika-peeriq/github-to-jira/commit/1193e0bb3ad4dd40b472821940cb024d7f779c60))
+
 ## [2.0.6](https://github.com/zvika-peeriq/github-to-jira/compare/v2.0.5...v2.0.6) (2021-08-28)
 
 
