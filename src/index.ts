@@ -5,9 +5,6 @@ import { exportGithubIssuesToJiraFormat } from './helpers/github';
 import { exportToJson } from './helpers/export-to-json';
 import { prompt } from './helpers';
 
-const VERSION = process.env.npm_package_version || '1.0.1';
-
-console.log(VERSION);
 interface Options {
   githubEnterprise: string;
   token: string;
@@ -21,7 +18,6 @@ interface Options {
 }
 
 program
-  .version(VERSION)
   .option('-g, --githubEnterprise [https://api.github.my-company.com]', 'Your GitHub Enterprise URL.')
   .option('-t, --token [token]', 'The GitHub token. https://github.com/settings/tokens')
   .option('-l, --labels [jira,test]', 'Comma separated label to apply the filters on')
@@ -57,7 +53,17 @@ program
 
     retObject.labels = options.labels || '';
     if (retObject.labels === '') {
-      retObject.labels = await prompt('Labels [jira,all,test]: ');
+      retObject.labels = await prompt('Labels [jira,client_name,etc.]: ');
+    }
+
+    retObject.state = options.state || undefined;
+    if (retObject.state === undefined) {
+      const response = await prompt('Labels [all,closed,open] - defaults to "open": ');
+      if (['all', 'closed', 'open'].includes(response)) {
+        retObject.state = response as 'all' | 'open' | 'closed';
+      } else {
+        retObject.state = 'open';
+      }
     }
 
     retObject.verbose = options.verbose || false;
@@ -69,7 +75,7 @@ program
         labels: retObject.labels,
         projectKey: retObject.jiraProjectKey,
         projectName: retObject.jiraProjectName,
-        state: retObject.state || 'open',
+        state: retObject.state,
         verbose: retObject.verbose,
       },
       octokit

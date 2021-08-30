@@ -7,18 +7,14 @@ import { getRepositoriesByGithubOrganization } from './get-repos-by-org';
 export const exportGithubIssuesToJiraFormat = async (options: GithubExportOptions, octokit: Octokit) => {
   // Start
   console.log('Export of Github Issues Started...');
-  
+
   if (options.verbose) {
     console.info('Started export with the following Options:');
     console.info(options);
   }
 
   // Get list of Repositories to iterate through
-  const repos: string[] = (await getRepositoriesByGithubOrganization(
-    options.githubRepoOwner,
-    'private',
-    octokit
-  )) as string[];
+  const repos = (await getRepositoriesByGithubOrganization(options.githubRepoOwner, 'private', octokit)) as string[];
 
   // Define Jira import object
   const jiraImport: JIRAImport = {
