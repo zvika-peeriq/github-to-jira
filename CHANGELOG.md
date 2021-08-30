@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/zvika-peeriq/github-to-jira/compare/v2.1.0...v2.2.0) (2021-08-30)
+
+
+### Features
+
+* **app:** Added new option for state ([53f4379](https://github.com/zvika-peeriq/github-to-jira/commit/53f43791ce38f044560ee666976a7d421e6cfd77))
+
 # [2.1.0](https://github.com/zvika-peeriq/github-to-jira/compare/v2.0.6...v2.1.0) (2021-08-30)
 
 
